@@ -29,6 +29,7 @@ class JornadaCrudController extends CrudController
         CRUD::setModel(\App\Models\Jornada::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/jornada');
         CRUD::setEntityNameStrings('jornada', 'jornadas');
+        $this->crud->denyAccess('show');
     }
 
     /**
@@ -49,6 +50,10 @@ class JornadaCrudController extends CrudController
 
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('descripcion')->type('text')->label('Descripción');
+
+        // cambiar el botón de "edit" por el de "finalizar"
+        $this->crud->removeButton('update');
+        $this->crud->addButtonFromView('line', 'finalizar', 'finalizar_jornada', 'beginning');
 
     }
 
