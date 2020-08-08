@@ -30,6 +30,7 @@ class JornadaCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/jornada');
         CRUD::setEntityNameStrings('jornada', 'jornadas');
         $this->crud->denyAccess('show');
+        $this->crud->set('create.view', 'crud::jornada.create');
     }
 
     /**
@@ -51,9 +52,13 @@ class JornadaCrudController extends CrudController
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('descripcion')->type('text')->label('Descripción');
 
-        // cambiar el botón de "edit" por el de "finalizar"
+        // cambiar el botón de "edit" por el de "finalizar jornada"
         $this->crud->removeButton('update');
         $this->crud->addButtonFromView('line', 'finalizar', 'finalizar_jornada', 'beginning');
+
+        // cambiar el botón de "edit" por el de "iniciar jornada"
+        $this->crud->removeButtonFromStack('create', 'top');
+        $this->crud->addButtonFromView('top', 'iniciar', 'iniciar_jornada', 'beginning');
 
     }
 
@@ -74,7 +79,6 @@ class JornadaCrudController extends CrudController
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
-        CRUD::field('descripcion')->type('text')->label('Descripcióncilla');
     }
 
     /**
@@ -85,6 +89,9 @@ class JornadaCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+
+        CRUD::setValidation(JornadaRequest::class);
+        CRUD::field('descripcion')->type('text')->label('Descripción del trabajo realizado');
+
     }
 }
