@@ -56,20 +56,16 @@ class Jornada extends Model
     */
 
     /**
-     * Global Scope Own (solo puedo ver mis propias jornadas, excepto admin)
+     * 1. Global Scope Own (solo puedo ver mis propias jornadas, excepto admin)
+     * 2. Observar el evento saving (user_id = backpack_user)
      */
     protected static function booted()
     {
         static::addGlobalScope(new OwnScope);
+
+        static::saving(function ($jornada) {
+            $jornada->user_id = backpack_user()->id;
+        });
     }
 
-
-    /**
-     * The event map for the model.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'saving' => \App\Events\JornadaSaving::class,
-    ];
 }
