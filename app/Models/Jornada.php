@@ -81,6 +81,9 @@ class Jornada extends Model
         static::saving(function ($jornada) {
             $jornada->user_id = backpack_user()->id;
         });
+        static::updating(function ($jornada) {
+            $jornada->final ?: $jornada->final = Carbon::now();
+        });
     }
 
 }

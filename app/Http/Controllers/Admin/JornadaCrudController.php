@@ -55,7 +55,6 @@ class JornadaCrudController extends CrudController
         }
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('final')->type('datetime')->label('Final');
-        // CRUD::column('duracion')->type('text')->label('Duración');
         CRUD::addColumn([
             'name' => 'duracion',
             'type' => 'text',
@@ -110,7 +109,24 @@ class JornadaCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         CRUD::setValidation(JornadaRequest::class);
-        CRUD::field('descripcion')->type('text')->label('Descripción del trabajo realizado');
+        CRUD::field('created_at')
+            ->type('datetime')
+            ->label('Hora inicio')
+            ->attributes(['disabled' => 'disabled'])
+            ->wrapper([
+                'class'      => 'form-group col-md-6'
+             ]);
+        CRUD::field('duracion')
+            ->type('text')
+            ->label('Duración hasta el momento')
+            ->attributes(['disabled' => 'disabled'])
+            ->wrapper([
+                'class'      => 'form-group col-md-6'
+             ]);
+        CRUD::field('descripcion')
+            ->type('text')
+            ->label('Descripción del trabajo realizado')
+            ->hint('Por ejemplo: proyecto, issue...');
     }
 
     /**
