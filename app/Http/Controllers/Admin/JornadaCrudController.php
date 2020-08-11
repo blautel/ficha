@@ -15,7 +15,7 @@ class JornadaCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { edit as protected editTrait; update as protected updateTrait; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -50,11 +50,15 @@ class JornadaCrudController extends CrudController
          */
 
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
+        CRUD::column('final')->type('datetime')->label('Final');
         CRUD::column('descripcion')->type('text')->label('Descripción');
 
-        // cambiar el botón de "edit" por el de "finalizar jornada"
+        // cambiar el botón de "edit" (acción update) por el de "finalizar jornada"
         $this->crud->removeButton('update');
         $this->crud->addButtonFromView('line', 'finalizar', 'finalizar_jornada', 'beginning');
+        // El control de acceso se realiza en:
+        // - vista boton finalizar_jornada
+        // - edit() y update() (ver final fichero)
 
         // cambiar el botón de "edit" por el de "iniciar jornada"
         $this->crud->removeButtonFromStack('create', 'top');
@@ -89,9 +93,34 @@ class JornadaCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-
         CRUD::setValidation(JornadaRequest::class);
         CRUD::field('descripcion')->type('text')->label('Descripción del trabajo realizado');
+    }
 
+    /**
+     * Permitir acceso a actualización si:
+     * - no hay fecha final (no finalizada todavía)
+     * - es el propietario o admin
+     */
+    protected function edit($id)
+    {
+        $jornada = $this->crud->getEntry($id);
+        if (is_null($jornada->final) && (backpack_user()->id == $jornada->user_id)) {
+            $this->crud->allowAccess('update');
+        } else {
+            $this->crud->denyAccess('update');
+        }
+        return $this->editTrait($id);
+    }
+
+    protected function update()
+    {
+        $jornada = $this->crud->entry;
+        if (is_null($jornada->final) && (backpack_user()->id == $jornada->user_id)) {
+            $this->crud->allowAccess('update');
+        } else {
+            $this->crud->denyAccess('update');
+        }
+        return $this->updateTrait();
     }
 }
