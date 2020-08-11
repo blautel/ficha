@@ -55,6 +55,18 @@ class JornadaCrudController extends CrudController
         }
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('final')->type('datetime')->label('Final');
+        // CRUD::column('duracion')->type('text')->label('Duración');
+        CRUD::addColumn([
+            'name' => 'duracion',
+            'type' => 'text',
+            'label' => 'Duración',
+            'wrapper'   => [
+                'element' => 'span',
+                'id' => function ($crud, $column, $entry) {
+                    return 'dur-id-'.$entry->id;
+                },
+            ],
+        ]);
         CRUD::column('descripcion')->type('text')->label('Descripción');
 
         // cambiar el botón de "edit" (acción update) por el de "finalizar jornada"

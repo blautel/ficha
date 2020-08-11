@@ -23,8 +23,10 @@ class Jornada extends Model
     protected $guarded = ['id', 'user_id'];
     // protected $fillable = [];
     // protected $hidden = [];
-    // protected $dates = [];
-    public $appends = ['nombre'];
+    protected $dates = [
+        'final',
+    ];
+    public $appends = ['nombre', 'duracion'];
 
     /*
     |--------------------------------------------------------------------------
@@ -58,6 +60,10 @@ class Jornada extends Model
         return $this->user->name;
     }
 
+    public function getDuracionAttribute()
+    {
+        return $this->final ? $this->final->diffAsCarbonInterval($this->created_at)->format('%h'.'h%im') : null;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
