@@ -7,6 +7,8 @@ use App\Http\Requests\CreateJornadaRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
+use App\Models\Jornada;
+
 /**
  * Class JornadaCrudController
  * @package App\Http\Controllers\Admin
@@ -85,6 +87,13 @@ class JornadaCrudController extends CrudController
         $this->crud->removeButtonFromStack('create', 'top');
         $this->crud->addButtonFromView('top', 'iniciar', 'iniciar_jornada', 'beginning');
 
+        // eliminar acceso a delete
+        $this->crud->denyAccess('delete');
+
+        // comprobar si hay alguna jornada en marcha para deny 'create'
+        if (Jornada::where('user_id', backpack_user()->id)->whereNull('final')->first()) {
+            $this->crud->denyAccess('create');
+        }
     }
 
     /**
