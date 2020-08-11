@@ -24,6 +24,7 @@ class Jornada extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+    public $appends = ['nombre'];
 
     /*
     |--------------------------------------------------------------------------
@@ -36,6 +37,10 @@ class Jornada extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function user()
+    {
+        return $this->belongsTo('\App\User');
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -48,6 +53,10 @@ class Jornada extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getNombreAttribute()
+    {
+        return $this->user->name;
+    }
 
     /*
     |--------------------------------------------------------------------------

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
-class JornadaRequest extends FormRequest
+class CreateJornadaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class JornadaRequest extends FormRequest
     public function rules()
     {
         return [
-            'descripcion' => 'required|min:5|max:255'
+            // En creación 'descripcion' no es obligatorio
         ];
     }
 

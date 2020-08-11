@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\JornadaRequest;
+use App\Http\Requests\CreateJornadaRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -49,6 +50,9 @@ class JornadaCrudController extends CrudController
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
 
+        if (backpack_user()->hasRole('administrador')) {
+            CRUD::column('nombre')->type('text')->label('Nombre');
+        }
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('final')->type('datetime')->label('Final');
         CRUD::column('descripcion')->type('text')->label('Descripción');
@@ -74,7 +78,7 @@ class JornadaCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(JornadaRequest::class);
+        CRUD::setValidation(CreateJornadaRequest::class);
 
         // CRUD::setFromDb(); // fields
 
@@ -115,7 +119,7 @@ class JornadaCrudController extends CrudController
 
     protected function update()
     {
-        $jornada = $this->crud->entry;
+        $jornada = $this->crud->getEntry($this->crud->getRequest()->request->get('id'));
         if (is_null($jornada->final) && (backpack_user()->id == $jornada->user_id)) {
             $this->crud->allowAccess('update');
         } else {
