@@ -6,6 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Scopes\OwnScope;
+use Carbon\Carbon;
 
 class Jornada extends Model
 {
@@ -62,8 +63,9 @@ class Jornada extends Model
 
     public function getDuracionAttribute()
     {
-        return $this->final ? $this->final->diffAsCarbonInterval($this->created_at)->format('%h'.'h%im') : null;
-    }
+        return $this->final
+            ? $this->final->diffAsCarbonInterval($this->created_at)->roundMinute()->forHumans()
+            : Carbon::now()->diffAsCarbonInterval($this->created_at)->roundMinute()->forHumans();    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
