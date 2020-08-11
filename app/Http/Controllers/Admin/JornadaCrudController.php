@@ -68,6 +68,9 @@ class JornadaCrudController extends CrudController
                     return $entry->final ? '' : 'text-success';
                 },
             ],
+            'prefix' => function ($crud, $column, $entry) {
+                return $entry->final ? '' : '<i class="la la-clock-o"></i>';
+            },
         ]);
         CRUD::column('descripcion')->type('text')->label('Descripción');
 
