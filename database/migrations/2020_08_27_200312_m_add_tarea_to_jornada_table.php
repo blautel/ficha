@@ -15,7 +15,7 @@ class MAddTareaToJornadaTable extends Migration
     {
         Schema::table('jornadas', function (Blueprint $table) {
             if (!Schema::hasColumn('jornadas', 'id_tarea')) {
-                $table->unsignedBigInteger('id_tarea')->after('user_id');
+                $table->unsignedBigInteger('id_tarea')->after('user_id')->nullable();
                 $table->foreign('id_tarea')->references('id')->on('tareas');
             }
         });
