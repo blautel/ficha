@@ -11,9 +11,4 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /docs
-.idea/ficha.iml
-.idea/laravel-plugin.xml
-.idea/vcs.xml
-.idea/modules.xml
-.idea/workspace.xml
-.idea/php.xml
+.idea/*
