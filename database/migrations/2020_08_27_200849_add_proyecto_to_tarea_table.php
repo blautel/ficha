@@ -15,7 +15,7 @@ class AddProyectoToTareaTable extends Migration
     {
         Schema::table('tareas', function (Blueprint $table) {
             if (!Schema::hasColumn('tareas', 'id_proyecto')) {
-                $table->unsignedBigInteger('id_proyecto')->index()->after('id');
+                $table->unsignedBigInteger('id_proyecto')->after('id');
                 $table->foreign('id_proyecto')->references('id')->on('proyectos');
             }
         });
