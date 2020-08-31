@@ -37,12 +37,12 @@ class Tarea extends Model
 
     public function proyecto()
     {
-        return $this->belongsTo(Proyecto::class, 'id_proyecto');
+        return $this->belongsTo('\App\Models\Proyecto', 'id_proyecto');
     }
 
     public function jornadas()
     {
-        return $this->hasMany(Jornada::class);
+        return $this->hasMany('\App\Models\Jornada');
     }
 
     /*
