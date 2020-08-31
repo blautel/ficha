@@ -35,6 +35,16 @@ class Tarea extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function proyecto()
+    {
+        return $this->belongsTo(Proyecto::class, 'id_proyecto');
+    }
+
+    public function jornadas()
+    {
+        return $this->hasMany(Jornada::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
