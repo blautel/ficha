@@ -37,7 +37,7 @@ class Proyecto extends Model
 
     public function tareas()
     {
-        return $this->hasMany(Tarea::class);
+        return $this->hasMany('\App\Models\Tarea');
     }
 
     /*

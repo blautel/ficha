@@ -47,7 +47,7 @@ class Jornada extends Model
 
     public function tarea()
     {
-        return $this->belongsTo(Tarea::class, 'id_tarea');
+        return $this->belongsTo('\App\Models\Tarea', 'id_tarea');
     }
 
     /*
