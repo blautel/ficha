@@ -45,30 +45,14 @@ class Jornada extends Model
         return $this->belongsTo('\App\User');
     }
 
+    public function tarea()
+    {
+        return $this->belongsTo(Tarea::class, 'id_tarea');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | ACCESSORS
-    |--------------------------------------------------------------------------
-    */
-    public function getNombreAttribute()
-    {
-        return $this->user->name;
-    }
-
-    public function getDuracionAttribute()
-    {
-        return $this->final
-            ? $this->final->diffAsCarbonInterval($this->created_at)->roundMinute()->forHumans()
-            : Carbon::now()->diffAsCarbonInterval($this->created_at)->roundMinute()->forHumans();    }
-    /*
-    |--------------------------------------------------------------------------
-    | MUTATORS
     |--------------------------------------------------------------------------
     */
 
@@ -87,5 +71,28 @@ class Jornada extends Model
             $jornada->final ?: $jornada->final = Carbon::now();
         });
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS
+    |--------------------------------------------------------------------------
+    */
+    public function getNombreAttribute()
+    {
+        return $this->user->name;
+    }
+
+    public function getDuracionAttribute()
+    {
+        return $this->final
+            ? $this->final->diffAsCarbonInterval($this->created_at)->roundMinute()->forHumans()
+            : Carbon::now()->diffAsCarbonInterval($this->created_at)->roundMinute()->forHumans();
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATORS
+    |--------------------------------------------------------------------------
+    */
+
 
 }
