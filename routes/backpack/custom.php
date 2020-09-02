@@ -12,11 +12,10 @@ Route::group([
     'middleware' => [
         config('backpack.base.web_middleware', 'web'),
         config('backpack.base.middleware_key', 'admin'),
-        'can:gest-accesos',
+        'can:gest-proyectos',
     ],
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
-    Route::crud('jornada', 'JornadaCrudController');
     Route::crud('proyecto', 'ProyectoCrudController');
     Route::crud('tarea', 'TareaCrudController');
 });

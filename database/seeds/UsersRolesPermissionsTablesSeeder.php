@@ -9,9 +9,11 @@ class UsersRolesPermissionsTablesSeeder extends Seeder
     {
         # permissions
         Permission::create(['name' => 'gest-accesos']);
+        Permission::create(['name' => 'gest-proyectos']);
         # roles
         Role::create(['name' => 'administrador'])
-            ->givePermissionTo('gest-accesos');
+            ->givePermissionTo('gest-accesos')
+            ->givePermissionTo('gest-proyectos');
         # users
         User::create(['name' => 'XB', 'email' => 'admin@admin.com', 'password' => bcrypt('admin')])
             ->assignRole('administrador');
