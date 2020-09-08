@@ -6,7 +6,7 @@
 // This route file is loaded automatically by Backpack\Base.
 // Routes you generate using Backpack\Generators will be placed here.
 
-//Grupo para acceso "admin"
+// Grupo para acceso "admin"
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => [
@@ -20,7 +20,7 @@ Route::group([
     Route::crud('tarea', 'TareaCrudController');
 });
 
-//Grupo para acceso normal
+// Grupo para acceso normal
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => [

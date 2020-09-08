@@ -18,6 +18,8 @@ class TareaCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 
 
     /**
@@ -43,15 +45,12 @@ class TareaCrudController extends CrudController
     {
         //CRUD::setFromDb(); // columns
 
-        CRUD::column('nombre')->type('text')->label('Tarea');
-        CRUD::addColumn([
+         CRUD::column('nombre')->type('text')->label('Tarea');
+         CRUD::addColumn([
 
-            'label'     => "Proyecto",
-            'type'      => 'select',
-            'name'      => 'id_proyecto', // the db column for the foreign key
-            'entity'    => 'proyecto',
-            'model'     => "App\Models\Proyecto", // related model
-            'attribute' => 'nombre' // foreign key attribute that is shown to user
+            'name'         => 'Proyectos', // name of relationship method in the model
+            'type'         => 'relationship',
+            'label'        => 'Proyectos', // Table column heading
         ]);
 
         /**
@@ -75,15 +74,13 @@ class TareaCrudController extends CrudController
 
         //CRUD::setFromDb(); // fields
 
-        CRUD::addfield([
-            'label'     => "Proyecto",
-            'type'      => 'select',
-            'name'      => 'id_proyecto', // the db column for the foreign key
-            'entity'    => 'proyecto',
-            'model'     => "App\Models\Proyecto", // related model
-            'attribute' => 'nombre' // foreign key attribute that is shown to user
-
-        ]);
+        CRUD::addField(// for n-n relationships (ex: tags) - inside ArticleCrudController
+            [
+                'type' => "relationship",
+                'name' => 'proyectos', // the method on your model that defines the relationship
+                'ajax' => true,
+                'inline_create' => [ 'entity' => 'proyecto' ] // specify the entity in singular
+    ]);
 
         CRUD::field('nombre')->type('text')->label('Tarea');
 
@@ -102,9 +99,15 @@ class TareaCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        CRUD::setValidation(TareaRequest::class);
+
         $this->setupCreateOperation();
     }
 
+    protected function fetchTag()
+    {
+        return $this->fetch(App\Models\Tag::class);
+    }
 }
 
 

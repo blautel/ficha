@@ -19,7 +19,7 @@ class Proyecto extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = ['nombre','jefe_proyecto'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -37,7 +37,7 @@ class Proyecto extends Model
 
     public function tareas()
     {
-        return $this->hasMany('\App\Models\Tarea');
+        return $this->belongsToMany('\App\Models\Tarea')->withTimestamps();
     }
 
     /*
