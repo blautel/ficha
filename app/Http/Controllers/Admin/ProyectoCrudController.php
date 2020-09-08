@@ -18,6 +18,8 @@ class ProyectoCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -44,6 +46,14 @@ class ProyectoCrudController extends CrudController
 
         CRUD::column('nombre')->type('text')->label('Proyecto');
 
+
+        CRUD::addColumn([
+
+            'name'         => 'Tareas', // name of relationship method in the model
+            'type'         => 'relationship',
+            'label'        => 'Tareas', // Table column heading
+        ]);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -61,8 +71,21 @@ class ProyectoCrudController extends CrudController
     {
         CRUD::setValidation(ProyectoRequest::class);
 
-        CRUD::setFromDb(); // fields
+        // CRUD::setFromDb(); // fields
 
+        CRUD::field('nombre')->type('text')->label('Proyecto');
+        CRUD::field('jefe_proyecto')->type('text')->label('Jefe de proyecto');
+
+        CRUD::addField([
+            'label'     => "Tareas",
+            'type'      => "relationship",
+            'name'      => 'tareas', // the method on your model that defines the relationship
+            //'ajax'      => true,
+            'inline_create' => [
+                'entity'         => 'tarea', // the entity in singular
+                //'modal_class'   => 'modal-dialog modal-xl', // use modal-sm, modal-lg modal-xl
+                ], // assumes the URL will be "/admin/category/inline/create"
+    ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -78,6 +101,18 @@ class ProyectoCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        CRUD::setValidation(ProyectoRequest::class);
+
         $this->setupCreateOperation();
+    }
+
+    /**
+     * Sobreescribimos la funcion que nos crea el formulario en el inline
+     * para que no nos muestre el campo proyecto
+     */
+
+    protected function fetchTareas()
+    {
+        return $this->fetch(App\Models\Proyecto::class);
     }
 }

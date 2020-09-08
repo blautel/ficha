@@ -19,7 +19,7 @@ class Tarea extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = ['nombre'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -35,15 +35,15 @@ class Tarea extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function proyecto()
+    public function proyectos()
     {
-        return $this->belongsTo('\App\Models\Proyecto', 'id_proyecto');
+        return $this->belongsToMany('\App\Models\Proyecto')->withTimestamps();
     }
 
-    public function jornadas()
-    {
-        return $this->hasMany('\App\Models\Jornada');
-    }
+    // public function jornadas()
+    // {
+    //     return $this->hasMany('\App\Models\Jornada');
+    // }
 
     /*
     |--------------------------------------------------------------------------
