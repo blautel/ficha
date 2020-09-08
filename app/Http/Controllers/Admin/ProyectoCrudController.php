@@ -107,6 +107,16 @@ class ProyectoCrudController extends CrudController
     }
 
     /**
+     * Sobreescribimos la funcion setupInlineCreateOperatio() para borrar el campo proyectos que no
+     * queremos en ese metodo
+     */
+
+    public function setupInlineCreateOperation()
+    {
+        $this->crud->removeField('tareas');
+    }
+
+    /**
      * Sobreescribimos la funcion que nos crea el formulario en el inline
      * para que no nos muestre el campo proyecto
      */

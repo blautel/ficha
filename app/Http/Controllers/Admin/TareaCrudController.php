@@ -104,6 +104,16 @@ class TareaCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
+    /**
+     * Sobreescribimos la funcion setupInlineCreateOperatio() para borrar el campo proyectos que no
+     * queremos en ese metodo
+     */
+
+    public function setupInlineCreateOperation()
+    {
+        $this->crud->removeField('proyectos');
+    }
+
     protected function fetchTag()
     {
         return $this->fetch(App\Models\Tag::class);
