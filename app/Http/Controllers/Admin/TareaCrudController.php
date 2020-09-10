@@ -43,11 +43,8 @@ class TareaCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        //CRUD::setFromDb(); // columns
-
-         CRUD::column('nombre')->type('text')->label('Tarea');
-         CRUD::addColumn([
-
+        CRUD::column('nombre')->type('text')->label('Tarea');
+        CRUD::addColumn([
             'name'         => 'Proyectos', // name of relationship method in the model
             'type'         => 'relationship',
             'label'        => 'Proyectos', // Table column heading
@@ -58,8 +55,6 @@ class TareaCrudController extends CrudController
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
-
-
     }
 
     /**
@@ -71,17 +66,14 @@ class TareaCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(TareaRequest::class);
-
-        //CRUD::setFromDb(); // fields
-
-        CRUD::addField(// for n-n relationships (ex: tags) - inside ArticleCrudController
+        CRUD::addField(// for n-n relationships
             [
-                'type' => "relationship",
+                'label' => 'Proyecto',
+                'placeholder'=> 'Seleccione un proyecto',
+                'type' => 'relationship',
                 'name' => 'proyectos', // the method on your model that defines the relationship
-                'ajax' => true,
                 'inline_create' => [ 'entity' => 'proyecto' ] // specify the entity in singular
-    ]);
-
+            ]);
         CRUD::field('nombre')->type('text')->label('Tarea');
 
         /**
@@ -99,24 +91,18 @@ class TareaCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        CRUD::setValidation(TareaRequest::class);
-
         $this->setupCreateOperation();
     }
 
     /**
-     * Sobreescribimos la funcion setupInlineCreateOperatio() para borrar el campo proyectos que no
+     * Sobreescribimos la funcion setupInlineCreateOperation() para borrar el campo proyectos que no
      * queremos en ese metodo
+     *
+     * @return void
      */
-
-    public function setupInlineCreateOperation()
+    protected function setupInlineCreateOperation()
     {
         $this->crud->removeField('proyectos');
-    }
-
-    protected function fetchTag()
-    {
-        return $this->fetch(App\Models\Tag::class);
     }
 }
 
