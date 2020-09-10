@@ -40,6 +40,11 @@ class Proyecto extends Model
         return $this->belongsToMany('\App\Models\Tarea')->withTimestamps();
     }
 
+    public function jornadas()
+    {
+        return $this->hasMany('\App\Models\Jornada');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
