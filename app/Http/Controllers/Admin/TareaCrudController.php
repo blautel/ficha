@@ -43,8 +43,9 @@ class TareaCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('nombre')->type('text')->label('Tarea');
-        CRUD::addColumn([
+
+         CRUD::column('nombre')->type('text')->label('Tarea');
+         CRUD::addColumn([
             'name'         => 'Proyectos', // name of relationship method in the model
             'type'         => 'relationship',
             'label'        => 'Proyectos', // Table column heading
@@ -74,6 +75,7 @@ class TareaCrudController extends CrudController
                 'name' => 'proyectos', // the method on your model that defines the relationship
                 'inline_create' => [ 'entity' => 'proyecto' ] // specify the entity in singular
             ]);
+
         CRUD::field('nombre')->type('text')->label('Tarea');
 
         /**

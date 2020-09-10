@@ -40,10 +40,10 @@ class Tarea extends Model
         return $this->belongsToMany('\App\Models\Proyecto')->withTimestamps();
     }
 
-    public function jornadas()
-    {
-        return $this->hasMany('\App\Models\Jornada');
-    }
+    // public function jornadas()
+    // {
+    //     return $this->hasMany('\App\Models\Jornada');
+    // }
 
     /*
     |--------------------------------------------------------------------------

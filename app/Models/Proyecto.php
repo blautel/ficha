@@ -35,7 +35,7 @@ class Proyecto extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function tareas()
+   public function tareas()
     {
         return $this->belongsToMany('\App\Models\Tarea')->withTimestamps();
     }

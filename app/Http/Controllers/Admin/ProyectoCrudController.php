@@ -49,6 +49,14 @@ class ProyectoCrudController extends CrudController
             'label'        => 'Tareas', // Table column heading
         ]);
 
+
+        CRUD::addColumn([
+
+            'name'         => 'Tareas', // name of relationship method in the model
+            'type'         => 'relationship',
+            'label'        => 'Tareas', // Table column heading
+        ]);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
