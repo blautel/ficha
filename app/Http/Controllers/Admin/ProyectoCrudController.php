@@ -42,9 +42,12 @@ class ProyectoCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        //CRUD::setFromDb(); // columns
-
         CRUD::column('nombre')->type('text')->label('Proyecto');
+        CRUD::addColumn([
+            'name'         => 'Tareas', // name of relationship method in the model
+            'type'         => 'relationship',
+            'label'        => 'Tareas', // Table column heading
+        ]);
 
 
         CRUD::addColumn([
@@ -70,21 +73,14 @@ class ProyectoCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ProyectoRequest::class);
-
-        // CRUD::setFromDb(); // fields
-
         CRUD::field('nombre')->type('text')->label('Proyecto');
         CRUD::field('jefe_proyecto')->type('text')->label('Jefe de proyecto');
-
         CRUD::addField([
             'label'     => "Tareas",
+            'placeholder'=> 'Seleccione una tarea',
             'type'      => "relationship",
             'name'      => 'tareas', // the method on your model that defines the relationship
-            //'ajax'      => true,
-            'inline_create' => [
-                'entity'         => 'tarea', // the entity in singular
-                //'modal_class'   => 'modal-dialog modal-xl', // use modal-sm, modal-lg modal-xl
-                ], // assumes the URL will be "/admin/category/inline/create"
+            'inline_create' => ['entity' => 'tarea', ] // the entity in singular]
     ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -101,28 +97,15 @@ class ProyectoCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        CRUD::setValidation(ProyectoRequest::class);
-
         $this->setupCreateOperation();
     }
 
     /**
-     * Sobreescribimos la funcion setupInlineCreateOperatio() para borrar el campo proyectos que no
+     * Sobreescribimos la funcion setupInlineCreateOperatio() para borrar el campo tareas que no
      * queremos en ese metodo
      */
-
     public function setupInlineCreateOperation()
     {
         $this->crud->removeField('tareas');
-    }
-
-    /**
-     * Sobreescribimos la funcion que nos crea el formulario en el inline
-     * para que no nos muestre el campo proyecto
-     */
-
-    protected function fetchTareas()
-    {
-        return $this->fetch(App\Models\Proyecto::class);
     }
 }

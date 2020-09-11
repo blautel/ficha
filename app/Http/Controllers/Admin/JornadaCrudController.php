@@ -53,7 +53,20 @@ class JornadaCrudController extends CrudController
          */
 
         if (backpack_user()->hasRole('administrador')) {
-            CRUD::column('nombre')->type('text')->label('Nombre');
+            // CRUD::column('nombre')->type('text')->label('Nombre');
+            CRUD::addColumn([
+
+                'name'         => 'User', // name of relationship method in the model
+                'type'         => 'relationship',
+                'label'        => 'Nombre', // Table column heading
+                'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                        $q->where('name', 'like', '%'.$searchTerm.'%');
+
+                    });
+                }
+            ]);
+
         }
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('final')->type('datetime')->label('Final');
@@ -142,7 +155,24 @@ class JornadaCrudController extends CrudController
             ->type('text')
             ->label('Descripción del trabajo realizado')
             ->hint('Por ejemplo: proyecto, issue...');
+        CRUD::addField([
+            'label'     => "Proyecto",
+            'placeholder'=> 'Seleccione un proyecto',
+            'type'      => "select2",
+            'name'      => 'proyecto', // the method on your model that defines the relationship
+            'attribute' => 'nombre',
+
+        ]);
+        CRUD::addField([
+            'label'     => "Tarea",
+            'placeholder'=> 'Seleccione un proyecto',
+            'type'      => "select2",
+            'name'      => 'tarea', // the method on your model that defines the relationship
+            'attribute' => 'nombre',
+
+        ]);
     }
+
 
     /**
      * Permitir acceso a actualización si:
