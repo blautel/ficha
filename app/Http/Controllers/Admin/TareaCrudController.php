@@ -17,7 +17,6 @@ class TareaCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 
@@ -44,18 +43,13 @@ class TareaCrudController extends CrudController
     protected function setupListOperation()
     {
 
-         CRUD::column('nombre')->type('text')->label('Tarea');
-         CRUD::addColumn([
+        CRUD::column('nombre')->type('text')->label('Tarea');
+        CRUD::addColumn([
             'name'         => 'Proyectos', // name of relationship method in the model
             'type'         => 'relationship',
             'label'        => 'Proyectos', // Table column heading
         ]);
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     /**
@@ -67,22 +61,14 @@ class TareaCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(TareaRequest::class);
-        CRUD::addField(// for n-n relationships
-            [
-                'label' => 'Proyecto',
+        CRUD::field('nombre')->type('text')->label('Tarea');
+        CRUD::addField([
+                'label' => 'Proyectos',
                 'placeholder'=> 'Seleccione un proyecto',
                 'type' => 'relationship',
                 'name' => 'proyectos', // the method on your model that defines the relationship
                 'inline_create' => [ 'entity' => 'proyecto' ] // specify the entity in singular
-            ]);
-
-        CRUD::field('nombre')->type('text')->label('Tarea');
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
+        ]);
     }
 
     /**
@@ -97,8 +83,7 @@ class TareaCrudController extends CrudController
     }
 
     /**
-     * Sobreescribimos la funcion setupInlineCreateOperation() para borrar el campo proyectos que no
-     * queremos en ese metodo
+     * Eliminar campo Tareas en la creación inline
      *
      * @return void
      */
@@ -106,6 +91,15 @@ class TareaCrudController extends CrudController
     {
         $this->crud->removeField('proyectos');
     }
+
+    /**
+     * Fetch de proyectos para campo relationship
+     */
+    protected function fetchProyectos()
+    {
+        return $this->fetch(\App\Models\Proyecto::class);
+    }
+
 }
 
 

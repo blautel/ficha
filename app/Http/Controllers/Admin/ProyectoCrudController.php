@@ -17,7 +17,6 @@ class ProyectoCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 
@@ -48,20 +47,6 @@ class ProyectoCrudController extends CrudController
             'type'         => 'relationship',
             'label'        => 'Tareas', // Table column heading
         ]);
-
-
-        CRUD::addColumn([
-
-            'name'         => 'Tareas', // name of relationship method in the model
-            'type'         => 'relationship',
-            'label'        => 'Tareas', // Table column heading
-        ]);
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     /**
@@ -81,12 +66,7 @@ class ProyectoCrudController extends CrudController
             'type'      => "relationship",
             'name'      => 'tareas', // the method on your model that defines the relationship
             'inline_create' => ['entity' => 'tarea', ] // the entity in singular]
-    ]);
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
+        ]);
     }
 
     /**
@@ -101,11 +81,21 @@ class ProyectoCrudController extends CrudController
     }
 
     /**
-     * Sobreescribimos la funcion setupInlineCreateOperatio() para borrar el campo tareas que no
-     * queremos en ese metodo
+     * Eliminar campo Tareas en la creación inline
+     *
+     * @return void
      */
-    public function setupInlineCreateOperation()
+    protected function setupInlineCreateOperation()
     {
         $this->crud->removeField('tareas');
     }
+
+    /**
+     * Fetch de tareas para campo relationship
+     */
+    protected function fetchTareas()
+    {
+        return $this->fetch(\App\Models\Tarea::class);
+    }
+
 }
