@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Proyecto;
 use App\Models\Tarea;
 
 class TareaApiController extends Controller
@@ -14,8 +15,6 @@ class TareaApiController extends Controller
 
         $form = collect($request->input('form'))->pluck('value', 'name');
 
-        $options = Tarea::query();
-
         // if no proyecto has been selected, show no options
         if (! $form['proyecto']) {
             return [];
@@ -23,7 +22,7 @@ class TareaApiController extends Controller
 
         // if a proyecto has been selected, only show articles in that proyecto
         if ($form['proyecto']) {
-            $options = $options->where('proyecto_id', $form['proyecto']);
+            $options = Proyecto::find($form['proyecto'])->tareas();
         }
 
         if ($search_term) {
