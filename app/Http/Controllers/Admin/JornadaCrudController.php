@@ -44,46 +44,34 @@ class JornadaCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        // CRUD::setFromDb(); // columns
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
-
         if (backpack_user()->hasRole('administrador')) {
-            // CRUD::column('nombre')->type('text')->label('Nombre');
             CRUD::addColumn([
-
-                'name'         => 'User', // name of relationship method in the model
-                'type'         => 'relationship',
-                'label'        => 'Nombre', // Table column heading
-                'searchLogic' => function ($query, $column, $searchTerm) {
+                'name'          => 'User', // name of relationship method in the model
+                'type'          => 'relationship',
+                'label'         => 'Nombre', // Table column heading
+                'searchLogic'   => function ($query, $column, $searchTerm) {
                     $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
                         $q->where('name', 'like', '%'.$searchTerm.'%');
-
                     });
                 }
             ]);
-
         }
         CRUD::column('created_at')->type('datetime')->label('Hora inicio');
         CRUD::column('final')->type('datetime')->label('Final');
         CRUD::addColumn([
-            'name' => 'duracion',
-            'type' => 'text',
-            'label' => 'Duración',
+            'name'      => 'duracion',
+            'type'      => 'text',
+            'label'     => 'Duración',
             'wrapper'   => [
-                'element' => 'span',
-                'id' => function ($crud, $column, $entry) {
+                'element'   => 'span',
+                'id'        => function ($crud, $column, $entry) {
                     return 'dur-id-'.$entry->id;
                 },
-                'class' => function ($crud, $column, $entry) {
+                'class'     => function ($crud, $column, $entry) {
                     return $entry->final ? '' : 'text-success';
                 },
             ],
-            'prefix' => function ($crud, $column, $entry) {
+            'prefix'    => function ($crud, $column, $entry) {
                 return $entry->final ? '' : '<i class="la la-clock-o"></i>';
             },
         ]);
@@ -118,14 +106,6 @@ class JornadaCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(CreateJornadaRequest::class);
-
-        // CRUD::setFromDb(); // fields
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 
     /**
@@ -160,16 +140,20 @@ class JornadaCrudController extends CrudController
             'placeholder'=> 'Seleccione un proyecto',
             'type'      => "select2",
             'name'      => 'proyecto', // the method on your model that defines the relationship
+            'entity'    => 'proyecto',
             'attribute' => 'nombre',
-
         ]);
         CRUD::addField([
-            'label'     => "Tarea",
-            'placeholder'=> 'Seleccione un proyecto',
-            'type'      => "select2",
-            'name'      => 'tarea', // the method on your model that defines the relationship
-            'attribute' => 'nombre',
-
+            'label'                 => "Tarea",
+            'placeholder'           => 'Seleccione una tarea',
+            'type'                  => "select2_from_ajax",
+            'name'                  => 'tarea_id', // the column that contains the ID of that connected entity;
+            'entity'                => 'tarea', // the method that defines the relationship in your Model
+            'attribute'             => 'nombre', // foreign key attribute that is shown to user
+            'data_source'           => url('api/tarea'), // url to controller search function (with /{id} should return model)
+            'minimum_input_length'  => 0, // minimum characters to type before querying results
+            'dependencies'          => ['proyecto'], // when a dependency changes, this select2 is reset to null
+            'include_all_form_fields' => true,
         ]);
     }
 

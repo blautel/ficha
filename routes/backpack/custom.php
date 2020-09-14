@@ -30,5 +30,6 @@ Route::group([
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () {
     Route::crud('jornada', 'JornadaCrudController');
-
+    Route::get('/api/tarea', 'TareaApiController@index');
+    Route::get('/api/tarea/{id}', 'TareaApiController@show');
 }); // this should be the absolute last line of this file
