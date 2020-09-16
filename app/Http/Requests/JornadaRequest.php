@@ -26,7 +26,9 @@ class JornadaRequest extends FormRequest
     public function rules()
     {
         return [
-            'descripcion' => 'required|min:5|max:255'
+            'descripcion' => 'required|min:5|max:255',
+            'proyecto' => 'required',
+            'tarea_id' => 'required',
         ];
     }
 
